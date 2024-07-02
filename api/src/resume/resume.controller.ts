@@ -49,6 +49,15 @@ export class ResumeController {
     return new ResponseDto(result);
   }
 
+  @Get('file/:id')
+  @ApiOperation({ summary: 'Get a resume file' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async getResume(@User() user: UserEntity, @Param('id') id: string) {
+    const result = await this.resumeService.getResume(user.id, id);
+    return new ResponseDto(result);
+  }
+
   @Get()
   @ApiOperation({ summary: "Get all user's resume" })
   @ApiBearerAuth()

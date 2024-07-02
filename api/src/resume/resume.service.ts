@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateResumeDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,14 +20,25 @@ export class ResumeService {
   ) {}
 
   async create(userId: string, dto: CreateResumeDto): Promise<ResumeEntity> {
-    const url = await this.storageService.generatePublicUrl(dto.objectKey);
-    delete dto.objectKey;
+    await this.storageService.getObject(dto.objectKey);
     const resume = this.resumeRepository.create({
       ...dto,
-      url,
       userId,
     });
     return this.resumeRepository.save(resume);
+  }
+
+  async getResume(userId: string, id: string) {
+    const resume = await this.resumeRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (resume.isReviewable && resume.userId != userId)
+      throw new BadRequestException('This Resume is not reviewable');
+
+    return await this.storageService.generateSignedUrl(resume.objectKey, 3600);
   }
 
   async getAll(userId: string): Promise<ResumeEntity[]> {
@@ -72,17 +87,12 @@ export class ResumeService {
     id: string,
     dto: UpdateResumeDto,
   ): Promise<ResumeEntity> {
-    const resume = await this.getById(userId, id); // Check ownership
+    await this.getById(userId, id); // Check ownership
 
-    let url = resume.url;
-    if (dto.objectKey) {
-      url = await this.storageService.generatePublicUrl(dto.objectKey);
-      delete dto.objectKey;
-    }
+    if (dto.objectKey) await this.storageService.getObject(dto.objectKey);
 
     await this.resumeRepository.update(id, {
       ...dto,
-      url,
     });
     return await this.getById(userId, id);
   }

@@ -50,7 +50,7 @@ export class StorageController {
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const filePath = `/tmp/${file.filename}`;
     try {
-      const key = await this.storageService.upload(file, 'private');
+      const key = await this.storageService.upload(file);
       const publicUrl = await this.storageService.generatePublicUrl(key);
       unlinkSync(filePath); // Remove file after upload
       return {

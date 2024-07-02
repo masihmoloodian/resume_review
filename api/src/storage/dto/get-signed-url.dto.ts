@@ -7,9 +7,4 @@ export class GetSignedUrlDto {
   @IsString()
   @IsNotEmpty()
   fileName: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  folderName: 'private' | 'public';
 }

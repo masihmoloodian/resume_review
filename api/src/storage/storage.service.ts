@@ -5,6 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createWriteStream, existsSync, mkdirSync, readFileSync } from 'fs';
 import * as path from 'path';
 import { pipeline } from 'stream';
@@ -78,28 +79,40 @@ export class StorageService {
     }
   }
 
-  async upload(
-    file: Express.Multer.File,
-    folderName: 'public' | 'private',
-  ): Promise<string> {
+  async upload(file: Express.Multer.File): Promise<string> {
     const { filename, path, mimetype } = file;
     const buffer = readFileSync(path);
 
-    const key = `${folderName}/${filename}`;
-
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
-      Key: key,
+      Key: filename,
       Body: buffer,
       ContentType: mimetype,
     });
 
     try {
       await this.s3.send(command);
-      return key;
+      return filename;
     } catch (error) {
       console.error('Error uploading to S3', error);
       throw new Error('Error uploading file to S3');
+    }
+  }
+
+  async generateSignedUrl(
+    objectKey: string,
+    expiresIn: number,
+  ): Promise<string> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: objectKey,
+    });
+
+    try {
+      const url = await getSignedUrl(this.s3, command, { expiresIn });
+      return url;
+    } catch (err) {
+      throw new BadRequestException('Error generating signed URL');
     }
   }
 }
