@@ -10,7 +10,7 @@ import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { readFileSync, unlinkSync } from 'fs';
+import { unlinkSync } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
 @ApiTags('Storage')
@@ -51,12 +51,10 @@ export class StorageController {
     const filePath = `/tmp/${file.filename}`;
     try {
       const key = await this.storageService.upload(file);
-      const publicUrl = await this.storageService.generatePublicUrl(key);
       unlinkSync(filePath); // Remove file after upload
       return {
         message: 'File uploaded successfully',
         key,
-        publicUrl,
       };
     } catch (error) {
       unlinkSync(filePath); // Remove file in case of error

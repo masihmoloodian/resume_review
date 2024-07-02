@@ -36,13 +36,6 @@ export class StorageService {
     });
   }
 
-  async generatePublicUrl(objectKey: string) {
-    const baseUrl = process.env.S3_PUBLIC_BASE_URL;
-    await this.getObject(objectKey);
-    const path = `${baseUrl}/${this.bucketName}/${objectKey}`;
-    return path;
-  }
-
   async getObject(key: string): Promise<GetObjectCommandOutput> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
