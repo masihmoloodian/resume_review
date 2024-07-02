@@ -25,9 +25,6 @@ export class ReviewEntity extends ParentEntity {
   @Column({ name: 'resume_id' })
   resumeId: string;
 
-  @Column()
-  anonymous: boolean;
-
   @Column('text')
   content: string;
 

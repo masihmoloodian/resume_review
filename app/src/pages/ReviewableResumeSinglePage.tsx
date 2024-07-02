@@ -26,7 +26,6 @@ const ReviewableResumeSinglePage = () => {
         try {
             await axiosInstance.post('/review', {
                 resumeId: id,
-                anonymous: values.anonymous,
                 content: values.content,
             });
             openSuccessNotification("Review submitted successfully");
@@ -87,13 +86,6 @@ const ReviewableResumeSinglePage = () => {
                                     rules={[{ required: true, message: 'Please enter your review' }]}
                                 >
                                     <TextArea rows={8} />
-                                </Form.Item>
-                                <Form.Item
-                                    name="anonymous"
-                                    valuePropName="checked"
-                                    initialValue={true}
-                                >
-                                    <Checkbox>Submit as anonymous</Checkbox>
                                 </Form.Item>
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit">

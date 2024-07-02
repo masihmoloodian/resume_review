@@ -8,11 +8,6 @@ export class CreateReviewDto {
   resumeId: string;
 
   @ApiProperty()
-  @IsBoolean()
-  @IsNotEmpty()
-  anonymous: boolean;
-
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   content: string;

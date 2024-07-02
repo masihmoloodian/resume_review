@@ -87,17 +87,7 @@ const ResumeSinglePage = () => {
                     </span>
                 </Tooltip>
             ),
-        },
-        {
-            title: 'Anonymous',
-            dataIndex: 'anonymous',
-            key: 'anonymous',
-            render: (text: any) => (
-                <Tag color={text ? 'green' : 'red'}>
-                    {text ? 'Yes' : 'No'}
-                </Tag>
-            ),
-        },
+        }
     ];
 
     return (
