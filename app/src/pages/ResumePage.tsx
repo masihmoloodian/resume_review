@@ -6,6 +6,7 @@ import { Content } from 'antd/es/layout/layout';
 import { openErrorNotification, openSuccessNotification } from '../helper/notification';
 import moment from 'moment';
 import { UploadOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -16,6 +17,7 @@ const ResumePage = () => {
     const [uploading, setUploading] = useState(false);
     const [file, setFile] = useState(null);
     const [editingResume, setEditingResume] = useState<any>(null);
+    const navigate = useNavigate();
 
     const getResumes = async () => {
         try {
@@ -77,12 +79,10 @@ const ResumePage = () => {
                 if (!objectKey) return;
             }
 
-            const updateData: any = {};
-            Object.keys(values).forEach((key) => {
-                if (values[key] !== editingResume[key]) {
-                    updateData[key] = values[key];
-                }
-            });
+            const updateData: any = {
+                title: values.title,
+                isReviewable: values.isReviewable,
+            };
 
             if (objectKey) {
                 updateData['objectKey'] = objectKey;
@@ -96,8 +96,10 @@ const ResumePage = () => {
                     openErrorNotification("Please select a file before submitting");
                     return;
                 }
+
                 await axiosInstance.post("/resume", {
-                    ...values,
+                    title: values.title,
+                    isReviewable: values.isReviewable,
                     objectKey,
                 });
                 openSuccessNotification("Resume added successfully");
@@ -131,24 +133,9 @@ const ResumePage = () => {
             key: 'title',
         },
         {
-            title: 'Visibility',
-            dataIndex: 'visibility',
-            key: 'visibility',
-        },
-        {
             title: 'Reviewable',
             dataIndex: 'isReviewable',
             key: 'isReviewable',
-            render: (text: any) => (
-                <Tag color={text ? 'green' : 'red'}>
-                    {text ? 'Yes' : 'No'}
-                </Tag>
-            ),
-        },
-        {
-            title: 'Anonymous',
-            dataIndex: 'isAnonymous',
-            key: 'isAnonymous',
             render: (text: any) => (
                 <Tag color={text ? 'green' : 'red'}>
                     {text ? 'Yes' : 'No'}
@@ -166,19 +153,23 @@ const ResumePage = () => {
             key: 'action',
             render: (_: any, record: any) => (
                 <span>
-                    <Button type="link" onClick={() => showModal(record)}>Edit</Button>
+                    <Button type="link" onClick={(e) => { e.stopPropagation(); showModal(record); }}>Edit</Button>
                     <Popconfirm
                         title="Are you sure delete this resume?"
-                        onConfirm={() => handleDelete(record.id)}
+                        onConfirm={(e: any) => { e.stopPropagation(); handleDelete(record.id); }}
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button type="link" danger>Delete</Button>
+                        <Button type="link" danger onClick={(e) => e.stopPropagation()}>Delete</Button>
                     </Popconfirm>
                 </span>
             ),
         },
     ];
+
+    const onRowClick = (record: any) => {
+        navigate(`/resume/${record.id}`);
+    };
 
     return (
         <Layout style={{
@@ -199,12 +190,19 @@ const ResumePage = () => {
                     borderRadius: '8px',
                     overflow: 'auto'
                 }}>
-                    <h1 style={{ marginBottom: '15px' }}>My Resumes</h1>
+                    <h1 style={{ marginBottom: '20px' }}>My Resumes</h1>
                     <Button type="primary" onClick={() => showModal()} style={{ marginBottom: '16px' }}>
                         Add Resume
                     </Button>
                     <div>
-                        <Table style={{ width: '1200px' }} dataSource={resumes} columns={columns} />
+                        <Table
+                            style={{ width: '1200px' }}
+                            dataSource={resumes}
+                            columns={columns}
+                            onRow={(record) => ({
+                                onClick: () => onRowClick(record),
+                            })}
+                        />
                     </div>
                 </Content>
             </Layout>
@@ -224,16 +222,6 @@ const ResumePage = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name="visibility"
-                        label="Visibility"
-                        rules={[{ required: !editingResume, message: 'Please select visibility' }]}
-                    >
-                        <Select>
-                            <Option value="public">Public</Option>
-                            <Option value="private">Private</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
                         name="isReviewable"
                         label="Reviewable"
                         rules={[{ required: !editingResume, message: 'Please select if reviewable' }]}
@@ -244,19 +232,10 @@ const ResumePage = () => {
                         </Select>
                     </Form.Item>
                     <Form.Item
-                        name="isAnonymous"
-                        label="Anonymous"
-                        rules={[{ required: !editingResume, message: 'Please select if anonymous' }]}
-                    >
-                        <Select>
-                            <Option value={true}>Yes</Option>
-                            <Option value={false}>No</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
                         label="Upload Resume"
                     >
                         <Upload
+                            accept=".pdf"
                             beforeUpload={(file: any) => {
                                 setFile(file);
                                 return false;

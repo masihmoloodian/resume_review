@@ -1,0 +1,21 @@
+#landing-title {
+  color: #fff !important;
+}
+
+#landing-subtitle {
+  color: #fff !important;
+}
+
+#custom-description {
+  color: #fff !important;
+}
+
+.logos {
+  display: flex;
+  flex-direction: 'row'
+}
+
+.custom-container {
+  display: flex;
+  flex-direction: 'column'
+}
