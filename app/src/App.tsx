@@ -9,6 +9,7 @@ import ResumePage from './pages/ResumePage';
 import ResumeSinglePage from './pages/ResumeSinglePage';
 import ReviewableResumePage from './pages/ReviewableResumePage';
 import ReviewableResumeSinglePage from './pages/ReviewableResumeSinglePage';
+import GivenReviewsPage from './pages/GivenReviewesPage';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
         <Route path="/resume/:id" element={<ResumeSinglePage />} />
         <Route path="/reviewable-resume" element={<ReviewableResumePage />} />
         <Route path="/reviewable-resume/:id" element={<ReviewableResumeSinglePage />} />
+        <Route path="/given-reviews" element={<GivenReviewsPage />} />
       </Routes>
     </Router>
   );

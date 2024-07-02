@@ -31,7 +31,6 @@ const ResumePage = () => {
             setResumes(response.data.data.data);
             setTotalItems(response.data.data.metadata.total);
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't fetch resumes");
         }
     };
@@ -115,7 +114,6 @@ const ResumePage = () => {
             setIsModalVisible(false);
             getResumes(currentPage);
         } catch (error) {
-            console.log(error);
             openErrorNotification("Failed to add or update resume");
         } finally {
             setUploading(false);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Layout, Table, Tag } from 'antd';
+import { Layout, Table } from 'antd';
 import axiosInstance from '../helper/axiosInstance';
 import Sidebar from '../components/Sidebar';
 import { Content } from 'antd/es/layout/layout';
@@ -20,7 +20,6 @@ const ReviewableResumePage = () => {
             setResumes(response.data.data);
             setTotal(response.data.metadata.total);
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't fetch resumes");
         }
     };

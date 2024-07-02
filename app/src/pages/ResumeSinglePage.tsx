@@ -22,7 +22,6 @@ const ResumeSinglePage = () => {
             const response = await axiosInstance.get(`/resume/${id}`);
             setResume(response.data.data);
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't fetch resume details");
         }
     };
@@ -33,7 +32,6 @@ const ResumeSinglePage = () => {
             setReviews(response.data.data);
             setTotalReviews(response.data.metadata.total);
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't fetch reviews");
         }
     };
@@ -44,7 +42,6 @@ const ResumeSinglePage = () => {
             const fileUrl = response.data.data;
             window.open(fileUrl, '_blank');
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't fetch resume file");
         }
     };
@@ -75,7 +72,6 @@ const ResumeSinglePage = () => {
                 isReviewable: checked,
             }));
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't update reviewable status");
         }
     };
@@ -88,7 +84,6 @@ const ResumeSinglePage = () => {
                 isPublic: checked,
             }));
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't update public status");
         }
     };

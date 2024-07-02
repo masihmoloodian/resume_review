@@ -17,7 +17,6 @@ const ReviewableResumeSinglePage = () => {
             const response = await axiosInstance.get(`/resume/reviewer/${id}?status=reviewable`);
             setResume(response.data);
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't fetch resume details");
         }
     };
@@ -40,7 +39,6 @@ const ReviewableResumeSinglePage = () => {
             const fileUrl = response.data.data;
             window.open(fileUrl, '_blank');
         } catch (error: any) {
-            console.log(error);
             openErrorNotification("Can't fetch resume file");
         }
     };

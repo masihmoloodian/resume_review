@@ -36,6 +36,10 @@ const Sidebar: React.FC = () => {
                 Reviewable Resume
             </Menu.Item>
 
+            <Menu.Item key="given-reviews" style={{ backgroundColor: 'white', color: 'black' }} onClick={() => navigate('/given-reviews')}>
+                Given Reviews
+            </Menu.Item>
+
             <Menu.Item key="logout" style={{ backgroundColor: 'white', color: 'black' }} onClick={logout}>
                 Logout
             </Menu.Item>
