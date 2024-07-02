@@ -69,14 +69,14 @@ const LoginPage: React.FC = () => {
       backgroundRepeat: 'no-repeat'
     }}
     >
-      <img src='/logo.png' alt="Logo" style={{
+      {/* <img src='/logo.png' alt="Logo" style={{
         position: 'absolute',
         top: '20px',
         left: '20px',
         zIndex: 10,
         width: '100px',
         height: 'auto',
-      }} />
+      }} /> */}
 
       <div style={{
         backgroundColor: 'rgba(255, 255, 255, 0.85)', // Slightly transparent background for form container to ensure readability
@@ -124,12 +124,12 @@ const LoginPage: React.FC = () => {
 
         <div style={{ textAlign: 'center', marginBottom: '16px' }}>
           <small>
-            <Link
+            {/* <Link
               onClick={() => navigate('/forget-password')}
               style={{ color: '#000', textDecoration: 'none', cursor: 'pointer' }} // Change text color to black
             >
               Forgot password?
-            </Link>
+            </Link> */}
           </small>
         </div>
       </div>

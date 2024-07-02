@@ -62,14 +62,14 @@ const ForgetPassPage: React.FC = () => {
             backgroundRepeat: 'no-repeat'
         }}
         >
-            <img src='/logo.png' alt="Logo" style={{
+            {/* <img src='/logo.png' alt="Logo" style={{
                 position: 'absolute',
                 top: '20px',
                 left: '20px',
                 zIndex: 10,
                 width: '100px',
                 height: 'auto',
-            }} />
+            }} /> */}
 
             <div style={{
                 backgroundColor: '#fff',

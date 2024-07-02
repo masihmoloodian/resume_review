@@ -17,7 +17,7 @@ const App: React.FC = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />{" "}
-        <Route path="/forget-password" element={<ForgetPassPage />} />{" "}
+        {/* <Route path="/forget-password" element={<ForgetPassPage />} />{" "} */}
         <Route path="/dashboard" element={<DashboardPage />} />{" "}
         <Route path="/resume" element={<ResumePage />} />{" "}
         <Route path="/resume/:id" element={<ResumeSinglePage />} />
