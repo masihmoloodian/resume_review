@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
   Query,
+  Put,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -59,7 +59,16 @@ export class ReviewController {
     return new ResponseDto(result.data, result.metadata);
   }
 
-  @Patch(':id')
+  @Get(':id')
+  @ApiOperation({ summary: "Get a user's review" })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async getById(@User() user: UserEntity, @Param('id') id: string) {
+    const result = await this.reviewService.getById(user.id, id);
+    return new ResponseDto(result);
+  }
+
+  @Put(':id')
   @ApiOperation({ summary: "Update a user's review by id" })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -68,7 +77,7 @@ export class ReviewController {
     @Param('id') id: string,
     @Body() dto: UpdateReviewDto,
   ) {
-    const result = this.reviewService.update(user.id, id, dto);
+    const result = await this.reviewService.update(user.id, id, dto);
     return new ResponseDto(result);
   }
 
@@ -77,7 +86,7 @@ export class ReviewController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   async remove(@User() user: UserEntity, @Param('id') id: string) {
-    const result = this.reviewService.remove(user.id, id);
+    const result = await this.reviewService.remove(user.id, id);
     return new ResponseDto(result);
   }
 }

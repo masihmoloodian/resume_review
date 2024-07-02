@@ -67,8 +67,6 @@ export class StorageService {
       await pipelineAsync(readableStream, writeStream);
       return filePath;
     } catch (err) {
-      console.log(err);
-
       throw new BadRequestException('Error saving file');
     }
   }

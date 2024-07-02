@@ -43,7 +43,7 @@ export class ReviewService {
     const take = SQL_TAKE;
     const [results, total] = await this.reviewRepository
       .createQueryBuilder('review')
-      .where('resume.userId = :userId', { userId })
+      .where('review.userId = :userId', { userId })
       .select([
         'review.id',
         'review.created_at',
@@ -54,8 +54,6 @@ export class ReviewService {
       .take(take)
       .orderBy('review.created_at', 'ASC')
       .getManyAndCount();
-
-    console.log({ results });
 
     return {
       data: results,
@@ -111,11 +109,8 @@ export class ReviewService {
     return this.getById(userId, id);
   }
 
-  async remove(userId: string, id: string): Promise<void> {
+  async remove(userId: string, id: string): Promise<any> {
     await this.getById(userId, id); // Check ownership
-    const result = await this.reviewRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Review with ID ${id} not found`);
-    }
+    return await this.reviewRepository.delete(id);
   }
 }
