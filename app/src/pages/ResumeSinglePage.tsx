@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Layout, Table, Tag, Button, Row, Col, Modal, Tooltip, Switch } from 'antd';
+import { Layout, Table, Tag, Button, Row, Col, Modal, Tooltip, Switch, Pagination } from 'antd';
 import axiosInstance from '../helper/axiosInstance';
 import Sidebar from '../components/Sidebar';
 import { Content } from 'antd/es/layout/layout';
@@ -10,8 +10,12 @@ import moment from 'moment';
 const ResumeSinglePage = () => {
     const { id } = useParams<{ id: string }>();
     const [resume, setResume] = useState<any>(null);
+    const [reviews, setReviews] = useState<any>([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalReviews, setTotalReviews] = useState(0);
+    const [pageSize] = useState(5);
 
     const getResume = async () => {
         try {
@@ -23,9 +27,32 @@ const ResumeSinglePage = () => {
         }
     };
 
+    const getReviews = async (page: number) => {
+        try {
+            const response = await axiosInstance.get(`/review/resume/${id}?page=${page}`);
+            setReviews(response.data.data);
+            setTotalReviews(response.data.metadata.total);
+        } catch (error: any) {
+            console.log(error);
+            openErrorNotification("Can't fetch reviews");
+        }
+    };
+
+    const getFile = async () => {
+        try {
+            const response = await axiosInstance.get(`/resume/file/${id}`);
+            const fileUrl = response.data.data;
+            window.open(fileUrl, '_blank');
+        } catch (error: any) {
+            console.log(error);
+            openErrorNotification("Can't fetch resume file");
+        }
+    };
+
     useEffect(() => {
         getResume();
-    }, [id]);
+        getReviews(currentPage);
+    }, [id, currentPage]);
 
     const showModal = (content: string) => {
         setModalContent(content);
@@ -40,18 +67,6 @@ const ResumeSinglePage = () => {
         setIsModalVisible(false);
     };
 
-    const viewResume = async () => {
-        try {
-            const response = await axiosInstance.get(`/resume/file/${id}`);
-            const fileUrl = response.data.data;
-
-            window.open(fileUrl, '_blank');
-        } catch (error: any) {
-            console.log(error);
-            openErrorNotification("Can't fetch resume file");
-        }
-    };
-
     const toggleReviewable = async (checked: boolean) => {
         try {
             await axiosInstance.put(`/resume/${id}`, { isReviewable: checked });
@@ -63,6 +78,10 @@ const ResumeSinglePage = () => {
             console.log(error);
             openErrorNotification("Can't update reviewable status");
         }
+    };
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
     };
 
     if (!resume) {
@@ -127,10 +146,22 @@ const ResumeSinglePage = () => {
                             <p>Update Date: {moment(resume.updated_at).format('YYYY-MM-DD')}</p>
                         </Col>
                     </Row>
-                    <Button type="primary" onClick={viewResume} style={{ marginTop: '16px' }}>View Resume</Button>
+                    <Button type="primary" onClick={getFile} style={{ marginTop: '16px' }}>View Resume</Button>
 
                     <h2 style={{ marginTop: '20px' }}>Received Reviews</h2>
-                    <Table dataSource={resume.review} columns={reviewColumns} rowKey="id" />
+                    <Table
+                        dataSource={reviews}
+                        columns={reviewColumns}
+                        rowKey="id"
+                        pagination={false}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={totalReviews}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                        style={{ marginTop: '16px' }}
+                    />
 
                     <Modal title="Review Content" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                         <p>{modalContent}</p>

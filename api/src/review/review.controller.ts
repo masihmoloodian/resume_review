@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -16,6 +17,7 @@ import { ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { User } from 'src/shared/decorators/user.decorator';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { PaginationDto } from 'src/shared/dto/pagniation.dto';
 
 @ApiTags('Review')
 @Controller('review')
@@ -35,18 +37,26 @@ export class ReviewController {
   @ApiOperation({ summary: "Get all user's review" })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async findAll(@User() user: UserEntity) {
-    const result = await this.reviewService.getAll(user.id);
+  async findAll(@User() user: UserEntity, @Query() dto: PaginationDto) {
+    const result = await this.reviewService.getAll(user.id, dto.page);
     return new ResponseDto(result.data, result.metadata);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: "Get a user's review by id" })
+  @Get('resume/:resumeId')
+  @ApiOperation({ summary: "Get resume's reviews by resume id" })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async findOne(@User() user: UserEntity, @Param('id') id: string) {
-    const result = this.reviewService.getById(user.id, id);
-    return new ResponseDto(result);
+  async getAllByResumeId(
+    @User() user: UserEntity,
+    @Param('resumeId') resumeId: string,
+    @Query() dto: PaginationDto,
+  ) {
+    const result = await this.reviewService.getAllByResumeId(
+      user.id,
+      resumeId,
+      dto.page,
+    );
+    return new ResponseDto(result.data, result.metadata);
   }
 
   @Patch(':id')

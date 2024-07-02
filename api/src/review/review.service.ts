@@ -44,6 +44,39 @@ export class ReviewService {
     const [results, total] = await this.reviewRepository
       .createQueryBuilder('review')
       .where('resume.userId = :userId', { userId })
+      .select([
+        'review.id',
+        'review.created_at',
+        'review.userId',
+        'review.resumeId',
+      ])
+      .skip((page - 1) * take)
+      .take(take)
+      .orderBy('review.created_at', 'ASC')
+      .getManyAndCount();
+
+    console.log({ results });
+
+    return {
+      data: results,
+      metadata: {
+        total,
+        page: +page,
+        lastPage: Math.ceil(total / take),
+      },
+    };
+  }
+
+  async getAllByResumeId(
+    userId: string,
+    resumeId: string,
+    page: number = 1,
+  ): Promise<any> {
+    const take = SQL_TAKE;
+    const [results, total] = await this.reviewRepository
+      .createQueryBuilder('review')
+      .where('review.resumeId = :resumeId', { resumeId })
+      .andWhere('review.userId = :userId', { userId })
       .select(['review'])
       .skip((page - 1) * take)
       .take(take)

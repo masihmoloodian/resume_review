@@ -74,7 +74,7 @@ export class ResumeController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   async getById(@User() user: UserEntity, @Param('id') id: string) {
-    const result = await this.resumeService.getByIdWithDetail(user.id, id);
+    const result = await this.resumeService.getById(user.id, id);
     return new ResponseDto(result);
   }
 
