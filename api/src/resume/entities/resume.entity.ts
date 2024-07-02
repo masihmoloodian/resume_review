@@ -32,6 +32,9 @@ export class ResumeEntity extends ParentEntity {
   @Column({ name: 'is_reviewable' })
   isReviewable: boolean;
 
+  @Column({ name: 'is_public', default: false })
+  isPublic: boolean;
+
   // ---------- Relations ----------
 
   @ManyToOne(() => UserEntity, (user) => user.resume)

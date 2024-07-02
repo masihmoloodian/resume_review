@@ -80,6 +80,19 @@ const ResumeSinglePage = () => {
         }
     };
 
+    const toggleIsPublic = async (checked: boolean) => {
+        try {
+            await axiosInstance.put(`/resume/${id}`, { isPublic: checked });
+            setResume((prevState: any) => ({
+                ...prevState,
+                isPublic: checked,
+            }));
+        } catch (error: any) {
+            console.log(error);
+            openErrorNotification("Can't update public status");
+        }
+    };
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -135,6 +148,15 @@ const ResumeSinglePage = () => {
                                 <Switch
                                     checked={resume.isReviewable}
                                     onChange={toggleReviewable}
+                                    style={{ marginLeft: '8px' }}
+                                />
+                            </p>
+                        </Col>
+                        <Col span={4}>
+                            <p>Public Access:
+                                <Switch
+                                    checked={resume.isPublic}
+                                    onChange={toggleIsPublic}
                                     style={{ marginLeft: '8px' }}
                                 />
                             </p>

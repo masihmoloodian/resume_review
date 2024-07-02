@@ -10,6 +10,10 @@ import { Repository } from 'typeorm';
 import { ResumeEntity } from './entities/resume.entity';
 import { StorageService } from 'src/storage/storage.service';
 import { SQL_TAKE } from 'src/shared/const/sql-take.const';
+import {
+  GetResumeForReviewers,
+  ResumeStatusEnum,
+} from './dto/get-resume-for-reviewers.dto';
 
 @Injectable()
 export class ResumeService {
@@ -71,16 +75,28 @@ export class ResumeService {
     return resume;
   }
 
-  async getAllReviewable(page: number = 1): Promise<any> {
+  async getAllReviewable(dto: GetResumeForReviewers): Promise<any> {
     const take = SQL_TAKE;
-    const [results, total] = await this.resumeRepository
+    const page = dto.page || 1;
+    let query = this.resumeRepository
       .createQueryBuilder('resume')
       .where('resume.isReviewable = :isReviewable', { isReviewable: true })
       .select(['resume'])
       .skip((page - 1) * take)
       .take(take)
-      .orderBy('resume.created_at', 'ASC')
-      .getManyAndCount();
+      .orderBy('resume.created_at', 'ASC');
+
+    if (dto.status == ResumeStatusEnum.REVIEWABLE)
+      query.where('resume.isReviewable = :isReviewable', {
+        isReviewable: true,
+      });
+
+    if (dto.status == ResumeStatusEnum.PUBLIC)
+      query.where('resume.isPublic = :isPublic', {
+        isPublic: true,
+      });
+
+    const [results, total] = await query.getManyAndCount();
 
     return {
       data: results,

@@ -14,7 +14,7 @@ const ReviewableResumeSinglePage = () => {
 
     const getResume = async () => {
         try {
-            const response = await axiosInstance.get(`/resume/reviewable/${id}`);
+            const response = await axiosInstance.get(`/resume/reviewer/${id}?status=reviewable`);
             setResume(response.data);
         } catch (error: any) {
             console.log(error);

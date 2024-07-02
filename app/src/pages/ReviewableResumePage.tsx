@@ -7,15 +7,18 @@ import { openErrorNotification } from '../helper/notification';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
-
 const ReviewableResumePage = () => {
     const [resumes, setResumes] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 5;
     const navigate = useNavigate();
 
-    const getResumes = async () => {
+    const getResumes = async (page: number) => {
         try {
-            const response = await axiosInstance.get("/resume/reviewable");
+            const response = await axiosInstance.get(`/resume/reviewer?page=${page}&pageSize=${pageSize}&status=reviewable`);
             setResumes(response.data.data);
+            setTotal(response.data.metadata.total);
         } catch (error: any) {
             console.log(error);
             openErrorNotification("Can't fetch resumes");
@@ -23,8 +26,12 @@ const ReviewableResumePage = () => {
     };
 
     useEffect(() => {
-        getResumes();
-    }, []);
+        getResumes(currentPage);
+    }, [currentPage]);
+
+    const handleTableChange = (pagination: any) => {
+        setCurrentPage(pagination.current);
+    };
 
     const columns = [
         {
@@ -69,6 +76,12 @@ const ReviewableResumePage = () => {
                             style={{ width: '1200px' }}
                             dataSource={resumes}
                             columns={columns}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: pageSize,
+                                total: total,
+                            }}
+                            onChange={handleTableChange}
                             onRow={(record) => ({
                                 onClick: () => onRowClick(record),
                             })}

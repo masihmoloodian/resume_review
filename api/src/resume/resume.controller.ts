@@ -18,6 +18,7 @@ import { User } from 'src/shared/decorators/user.decorator';
 import { ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { PaginationDto } from 'src/shared/dto/pagniation.dto';
+import { GetResumeForReviewers } from './dto/get-resume-for-reviewers.dto';
 
 @ApiTags('Resume')
 @Controller('resume')
@@ -33,20 +34,23 @@ export class ResumeController {
     return new ResponseDto(result);
   }
 
-  @Get('reviewable')
-  @ApiOperation({ summary: "Get all user's resume available for review" })
+  @Get('reviewer')
+  @ApiOperation({ summary: "Get all user's resume for reviewers" })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async getAllReviewable(@Query() dto: PaginationDto) {
-    const result = await this.resumeService.getAllReviewable(dto.page);
+  async getAllReviewable(@Query() dto: GetResumeForReviewers) {
+    const result = await this.resumeService.getAllReviewable(dto);
     return new ResponseDto(result.data, result.metadata);
   }
 
-  @Get('reviewable/:id')
-  @ApiOperation({ summary: "Get a user's resume by id available for review" })
+  @Get('reviewer/:id')
+  @ApiOperation({ summary: "Get a user's resume by id for reviewers" })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async getByIdReviewable(@Param('id') id: string) {
+  async getByIdReviewable(
+    @Param('id') id: string,
+    @Query() dto: GetResumeForReviewers,
+  ) {
     const result = await this.resumeService.getByIdReviewable(id);
     return new ResponseDto(result);
   }
