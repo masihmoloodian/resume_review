@@ -13,8 +13,8 @@ async function bootstrap() {
   app.setGlobalPrefix('v1');
 
   const documentBuilder = new DocumentBuilder()
-    .setTitle('Deploy me API')
-    .setDescription('Deploy me API')
+    .setTitle('Resume Review API')
+    .setDescription('Resume Review API')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

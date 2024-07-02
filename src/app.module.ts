@@ -10,6 +10,8 @@ import { OpenaiModule } from './openai/openai.module';
 import { RedisdbModule } from './redisdb/redisdb.module';
 import { LlamaindexModule } from './llamaindex/llamaindex.module';
 import { StorageModule } from './storage/storage.module';
+import { ResumeModule } from './resume/resume.module';
+import { ReviewModule } from './review/review.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,6 +38,8 @@ import { StorageModule } from './storage/storage.module';
     RedisdbModule,
     LlamaindexModule,
     StorageModule,
+    ResumeModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],

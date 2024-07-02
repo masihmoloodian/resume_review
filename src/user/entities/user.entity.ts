@@ -4,9 +4,12 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { hash } from 'bcrypt';
+import { ResumeEntity } from 'src/resume/entities/resume.entity';
+import { ReviewEntity } from 'src/review/entities/review.entity';
 require('dotenv').config();
 
 @Entity('users')
@@ -29,6 +32,16 @@ export class UserEntity extends ParentEntity {
   active: boolean;
 
   // ---------- Relations ----------
+
+  @OneToMany(() => ResumeEntity, (resume) => resume.user, {
+    cascade: true,
+  })
+  resume: ResumeEntity;
+
+  @OneToMany(() => ReviewEntity, (review) => review.user, {
+    cascade: true,
+  })
+  review: ReviewEntity;
 
   @BeforeInsert()
   @BeforeUpdate()
