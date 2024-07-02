@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   GetObjectCommandOutput,
   PutObjectCommand,
@@ -104,6 +105,20 @@ export class StorageService {
     try {
       const url = await getSignedUrl(this.s3, command, { expiresIn });
       return url;
+    } catch (err) {
+      throw new BadRequestException('Error generating signed URL');
+    }
+  }
+
+  async delete(objectKey: string): Promise<string> {
+    const command = new DeleteObjectCommand({
+      Bucket: this.bucketName,
+      Key: objectKey,
+    });
+
+    try {
+      await this.s3.send(command);
+      return 'object deleted!';
     } catch (err) {
       throw new BadRequestException('Error generating signed URL');
     }

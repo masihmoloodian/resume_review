@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Layout, Table, Tag, Button, Modal, Form, Input, Select, Upload, Popconfirm } from 'antd';
+import { Layout, Table, Tag, Button, Modal, Form, Input, Select, Upload, Switch } from 'antd';
 import axiosInstance from '../helper/axiosInstance';
 import Sidebar from '../components/Sidebar';
 import { Content } from 'antd/es/layout/layout';
@@ -13,6 +13,7 @@ const { Option } = Select;
 const ResumePage = () => {
     const [resumes, setResumes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [form] = Form.useForm();
     const [uploading, setUploading] = useState(false);
     const [file, setFile] = useState(null);
@@ -20,6 +21,8 @@ const ResumePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(5);
     const [totalItems, setTotalItems] = useState(0);
+    const [keepFile, setKeepFile] = useState(true);
+    const [deletingResumeId, setDeletingResumeId] = useState<number | null>(null);
     const navigate = useNavigate();
 
     const getResumes = async (page: number) => {
@@ -119,15 +122,25 @@ const ResumePage = () => {
         }
     };
 
-    const handleDelete = async (id: number) => {
-        try {
-            await axiosInstance.delete(`/resume/${id}`);
-            openSuccessNotification("Resume deleted successfully");
-            getResumes(currentPage);
-        } catch (error) {
-            console.error("Delete failed:", error);
-            openErrorNotification("Failed to delete resume");
+    const handleDeleteConfirm = async () => {
+        if (deletingResumeId !== null) {
+            try {
+                await axiosInstance.delete(`/resume/${deletingResumeId}?keepFile=${keepFile}`);
+                openSuccessNotification("Resume deleted successfully");
+                getResumes(currentPage);
+            } catch (error) {
+                console.error("Delete failed:", error);
+                openErrorNotification("Failed to delete resume");
+            } finally {
+                setIsDeleteModalVisible(false);
+                setDeletingResumeId(null);
+            }
         }
+    };
+
+    const handleDelete = (id: number) => {
+        setDeletingResumeId(id);
+        setIsDeleteModalVisible(true);
     };
 
     const columns = [
@@ -158,14 +171,7 @@ const ResumePage = () => {
             render: (_: any, record: any) => (
                 <span>
                     <Button type="link" onClick={(e) => { e.stopPropagation(); showModal(record); }}>Edit</Button>
-                    <Popconfirm
-                        title="Are you sure delete this resume?"
-                        onConfirm={(e: any) => { e.stopPropagation(); handleDelete(record.id); }}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button type="link" danger onClick={(e) => e.stopPropagation()}>Delete</Button>
-                    </Popconfirm>
+                    <Button type="link" danger onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}>Delete</Button>
                 </span>
             ),
         },
@@ -260,6 +266,17 @@ const ResumePage = () => {
                         </Upload>
                     </Form.Item>
                 </Form>
+            </Modal>
+            <Modal
+                title="Delete Resume"
+                visible={isDeleteModalVisible}
+                onOk={handleDeleteConfirm}
+                onCancel={() => setIsDeleteModalVisible(false)}
+            >
+                <p>Are you sure you want to delete this resume?</p>
+
+                <Switch checked={keepFile} onChange={setKeepFile} /> Keep File
+                <p>By allowing us to keep your file, you help improve our system and support the community.</p>
             </Modal>
         </Layout>
     );

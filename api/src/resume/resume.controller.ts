@@ -19,6 +19,7 @@ import { ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { PaginationDto } from 'src/shared/dto/pagniation.dto';
 import { GetResumeForReviewers } from './dto/get-resume-for-reviewers.dto';
+import { DeleteResumeDto } from './dto/delete-resume.dto';
 
 @ApiTags('Resume')
 @Controller('resume')
@@ -99,8 +100,12 @@ export class ResumeController {
   @ApiOperation({ summary: 'Delete a resume by id' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async remove(@User() user: UserEntity, @Param('id') id: string) {
-    const result = await this.resumeService.remove(user.id, id);
+  async remove(
+    @User() user: UserEntity,
+    @Param('id') id: string,
+    @Query() dto: DeleteResumeDto,
+  ) {
+    const result = await this.resumeService.remove(user.id, id, dto);
     return new ResponseDto(result);
   }
 }

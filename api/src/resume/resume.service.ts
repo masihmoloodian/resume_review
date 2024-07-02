@@ -14,6 +14,7 @@ import {
   GetResumeForReviewers,
   ResumeStatusEnum,
 } from './dto/get-resume-for-reviewers.dto';
+import { DeleteResumeDto } from './dto/delete-resume.dto';
 
 @Injectable()
 export class ResumeService {
@@ -139,9 +140,17 @@ export class ResumeService {
     return await this.getById(userId, id);
   }
 
-  async remove(userId: string, id: string): Promise<void> {
-    await this.getById(userId, id); // Check ownership
+  async remove(
+    userId: string,
+    id: string,
+    dto: DeleteResumeDto,
+  ): Promise<void> {
+    const resume = await this.getById(userId, id); // Check ownership
     const result = await this.resumeRepository.delete(id);
+
+    if ((dto.keepFile as any) == 'false') {
+      await this.storageService.delete(resume.objectKey);
+    }
     if (result.affected === 0)
       throw new NotFoundException(`Resume with ID ${id} not found`);
   }

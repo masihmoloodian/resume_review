@@ -40,7 +40,9 @@ export class ReviewEntity extends ParentEntity {
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @ManyToOne(() => ResumeEntity, (resume) => resume.review)
+  @ManyToOne(() => ResumeEntity, (resume) => resume.review, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'resume_id' })
   resume: ResumeEntity;
 }
