@@ -13,17 +13,7 @@ export class CreateResumeDto {
   objectKey: string;
 
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  visibility: string;
-
-  @ApiProperty()
   @IsBoolean()
   @IsNotEmpty()
   isReviewable: boolean;
-
-  @ApiProperty()
-  @IsBoolean()
-  @IsNotEmpty()
-  isAnonymous: boolean;
 }

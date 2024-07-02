@@ -27,16 +27,10 @@ export class ResumeEntity extends ParentEntity {
   title: string;
 
   @Column()
-  url: string;
-
-  @Column()
-  visibility: string;
+  objectKey: string;
 
   @Column({ name: 'is_reviewable' })
   isReviewable: boolean;
-
-  @Column({ name: 'is_anonymous' })
-  isAnonymous: boolean;
 
   // ---------- Relations ----------
 
