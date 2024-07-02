@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Layout, Table, Tag, Button, Row, Col, Modal, Tooltip } from 'antd';
+import { Layout, Table, Tag, Button, Row, Col, Modal, Tooltip, Switch } from 'antd';
 import axiosInstance from '../helper/axiosInstance';
 import Sidebar from '../components/Sidebar';
 import { Content } from 'antd/es/layout/layout';
@@ -49,6 +49,19 @@ const ResumeSinglePage = () => {
         } catch (error: any) {
             console.log(error);
             openErrorNotification("Can't fetch resume file");
+        }
+    };
+
+    const toggleReviewable = async (checked: boolean) => {
+        try {
+            await axiosInstance.put(`/resume/${id}`, { isReviewable: checked });
+            setResume((prevState: any) => ({
+                ...prevState,
+                isReviewable: checked,
+            }));
+        } catch (error: any) {
+            console.log(error);
+            openErrorNotification("Can't update reviewable status");
         }
     };
 
@@ -109,7 +122,13 @@ const ResumeSinglePage = () => {
                     <h1 style={{ marginBottom: '10px' }}>{resume.title}</h1>
                     <Row gutter={[8, 8]}>
                         <Col span={4}>
-                            <p>Reviewable: <span style={{ color: resume.isReviewable ? 'green' : 'red' }}>{resume.isReviewable ? 'Yes' : 'No'}</span></p>
+                            <p>Reviewable:
+                                <Switch
+                                    checked={resume.isReviewable}
+                                    onChange={toggleReviewable}
+                                    style={{ marginLeft: '8px' }}
+                                />
+                            </p>
                         </Col>
                         <Col span={5}>
                             <p>Create Date: {moment(resume.created_at).format('YYYY-MM-DD')}</p>
