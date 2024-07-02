@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,6 +21,16 @@ export class ReviewService {
 
   async create(userId: string, dto: CreateReviewDto): Promise<ReviewEntity> {
     await this.resumeService.isExist(dto.resumeId);
+    const isExits = await this.reviewRepository.findOne({
+      where: {
+        userId,
+        resumeId: dto.resumeId,
+      },
+    });
+    if (isExits)
+      throw new BadRequestException(
+        'You have already submitted a review for this resume.',
+      );
     const review = this.reviewRepository.create({
       ...dto,
       userId,

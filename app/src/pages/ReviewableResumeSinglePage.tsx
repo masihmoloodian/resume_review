@@ -30,8 +30,7 @@ const ReviewableResumeSinglePage = () => {
             });
             openSuccessNotification("Review submitted successfully");
         } catch (error: any) {
-            console.log(error);
-            openErrorNotification("Failed to submit review");
+            openErrorNotification(error.response.data.message);
         }
     };
 
