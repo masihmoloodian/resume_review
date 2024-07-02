@@ -31,6 +31,24 @@ export class ResumeController {
     return new ResponseDto(result);
   }
 
+  @Get('reviewable')
+  @ApiOperation({ summary: "Get all user's resume available for review" })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async getAllReviewable() {
+    const result = await this.resumeService.getAllReviewable();
+    return new ResponseDto(result);
+  }
+
+  @Get('reviewable/:id')
+  @ApiOperation({ summary: "Get a user's resume by id available for review" })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async getByIdReviewable(@Param('id') id: string) {
+    const result = await this.resumeService.getByIdReviewable(id);
+    return new ResponseDto(result);
+  }
+
   @Get()
   @ApiOperation({ summary: "Get all user's resume" })
   @ApiBearerAuth()
@@ -68,26 +86,6 @@ export class ResumeController {
   @UseGuards(AuthGuard)
   async remove(@User() user: UserEntity, @Param('id') id: string) {
     const result = await this.resumeService.remove(user.id, id);
-    return new ResponseDto(result);
-  }
-
-  // Reviewable
-
-  @Get('reviewable')
-  @ApiOperation({ summary: "Get all user's resume available for review" })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  async getAllReviewable() {
-    const result = await this.resumeService.getAllReviewable();
-    return new ResponseDto(result);
-  }
-
-  @Get('reviewable/:id')
-  @ApiOperation({ summary: "Get a user's resume by id available for review" })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  async getByIdReviewable(@Param('id') id: string) {
-    const result = await this.resumeService.getByIdReviewable(id);
     return new ResponseDto(result);
   }
 }
