@@ -28,6 +28,12 @@ export class ReviewEntity extends ParentEntity {
   @Column('text')
   content: string;
 
+  @Column({ name: 'is_read', default: false })
+  isRead: boolean;
+
+  @Column({ name: 'is_important', default: false })
+  isImportant: boolean;
+
   // ---------- Relations ----------
 
   @ManyToOne(() => UserEntity, (user) => user.review)
