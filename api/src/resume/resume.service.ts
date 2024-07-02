@@ -41,6 +41,7 @@ export class ResumeService {
       },
     });
 
+    if (!resume) throw new NotFoundException('Resume not found');
     if (resume.isReviewable && resume.userId != userId)
       throw new BadRequestException('This Resume is not reviewable');
 
