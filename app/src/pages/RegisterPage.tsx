@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Link from 'antd/es/typography/Link';
 import { openErrorNotification, openSuccessNotification } from '../helper/notification';
 import { Button } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 interface FormData {
 	email: string;
@@ -99,6 +100,15 @@ const RegisterPage: React.FC = () => {
 
 				<div style={{ textAlign: 'center', marginBottom: '16px' }}>
 					<small>
+						<Link
+							onClick={() => navigate('/privacy-policy')}
+							style={{ color: '#000', textDecoration: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+						>
+							<ExclamationCircleOutlined style={{ marginRight: '5px' }} />
+							By registering, you agree to the privacy policy. Click to go to the page.
+						</Link>
+						<br />
+
 						<Link
 							onClick={() => navigate('/login')}
 							style={{ color: '#000', textDecoration: 'none', cursor: 'pointer' }}

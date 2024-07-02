@@ -4,12 +4,13 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import LandingPage from './pages/LandingPage';
-import ForgetPassPage from './pages/ForgetPassPape';
+// import ForgetPassPage from './pages/ForgetPassPape';
 import ResumePage from './pages/ResumePage';
 import ResumeSinglePage from './pages/ResumeSinglePage';
 import ReviewableResumePage from './pages/ReviewableResumePage';
 import ReviewableResumeSinglePage from './pages/ReviewableResumeSinglePage';
 import GivenReviewsPage from './pages/GivenReviewesPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicypPage';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/reviewable-resume" element={<ReviewableResumePage />} />
         <Route path="/reviewable-resume/:id" element={<ReviewableResumeSinglePage />} />
         <Route path="/given-reviews" element={<GivenReviewsPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
       </Routes>
     </Router>
   );

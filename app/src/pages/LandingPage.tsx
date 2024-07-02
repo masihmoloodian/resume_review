@@ -1,18 +1,8 @@
-import { useEffect, useState } from 'react';
 import './LandingPage.css';
 
 const LandingPage = () => {
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-
     const titleStyle: React.CSSProperties = {
-        fontSize: windowWidth <= 768 ? '2rem' : '5rem',
+        fontSize: '5rem',
         textAlign: 'center',
         position: 'absolute',
         top: '35%',
@@ -23,10 +13,10 @@ const LandingPage = () => {
     };
 
     const subtitleStyle: React.CSSProperties = {
-        fontSize: windowWidth <= 768 ? '1rem' : '2rem',
+        fontSize: '2rem',
         textAlign: 'center',
         position: 'absolute',
-        top: windowWidth <= 768 ? '45%' : '55%',
+        top: '55%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         zIndex: 10,
@@ -57,22 +47,6 @@ const LandingPage = () => {
         backgroundRepeat: 'no-repeat',
     };
 
-    const footerStyle: React.CSSProperties = {
-        position: 'absolute',
-        bottom: '0',
-        width: '100%',
-        textAlign: 'center',
-        color: 'white',
-        fontSize: windowWidth <= 768 ? '0.5rem' : '1rem',
-        padding: '10px 0', // Padding for visual comfort
-    };
-
-    const productLinkStyle: React.CSSProperties = {
-        color: 'white',
-        textDecoration: 'underline',
-        cursor: 'pointer',
-    };
-
     return (
         <div className="App" style={mainContainerStyle}>
             <div style={linkContainerStyle}>
@@ -80,11 +54,8 @@ const LandingPage = () => {
                 <a href="/register" style={linkStyle}>Register</a>
             </div>
             <div className='custom-container'>
-                <h1 id='landing-title' style={titleStyle}>Resume Review</h1>
-                <p style={subtitleStyle}>Get review for free!</p>
-            </div>
-            <div style={footerStyle}>
-                © 2024 AI Proxy. All rights reserved. | <a href="https://j3su.com" style={productLinkStyle}>A product of J3SU</a>
+                <h1 id="landing-title" style={titleStyle}>Resume Review</h1>
+                <p style={subtitleStyle}>Receive feedback at no cost!</p>
             </div>
         </div>
     );
