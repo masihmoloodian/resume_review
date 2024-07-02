@@ -38,6 +38,27 @@ export class ResumeService {
     return resume;
   }
 
+  async getAllReviewable(): Promise<ResumeEntity[]> {
+    return this.resumeRepository.find({ where: { isReviewable: true } });
+  }
+
+  async getByIdReviewable(id: string): Promise<ResumeEntity> {
+    const resume = await this.resumeRepository.findOne({
+      where: { id, isReviewable: true },
+    });
+    if (!resume) throw new NotFoundException(`Resume with ID ${id} not found`);
+    return resume;
+  }
+
+  async getByIdWithDetail(userId: string, id: string): Promise<ResumeEntity> {
+    const resume = await this.resumeRepository.findOne({
+      where: { id, userId },
+      relations: ['review'],
+    });
+    if (!resume) throw new NotFoundException(`Resume with ID ${id} not found`);
+    return resume;
+  }
+
   async isExist(id: string): Promise<boolean> {
     const resume = await this.resumeRepository.findOne({
       where: { id },
