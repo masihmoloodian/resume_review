@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Layout, Table, Tag, Button, Modal, Form, Input, Select, Upload, Switch } from 'antd';
+import { Layout, Table, Tag, Button, Modal, Form, Input, Select, Upload, Switch, Alert } from 'antd';
 import axiosInstance from '../helper/axiosInstance';
 import Sidebar from '../components/Sidebar';
 import { Content } from 'antd/es/layout/layout';
@@ -251,6 +251,12 @@ const ResumePage = () => {
                             <Option value={false}>No</Option>
                         </Select>
                     </Form.Item>
+                    <Alert
+                        message="Warning"
+                        description="Please make sure your file does not include sensitive information."
+                        type="error"
+                        showIcon
+                    />
                     <Form.Item
                         label="Upload Resume"
                     >
