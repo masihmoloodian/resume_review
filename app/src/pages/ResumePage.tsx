@@ -17,12 +17,16 @@ const ResumePage = () => {
     const [uploading, setUploading] = useState(false);
     const [file, setFile] = useState(null);
     const [editingResume, setEditingResume] = useState<any>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize] = useState(10);
+    const [totalItems, setTotalItems] = useState(0);
     const navigate = useNavigate();
 
-    const getResumes = async () => {
+    const getResumes = async (page: number) => {
         try {
-            const response = await axiosInstance.get("/resume");
-            setResumes(response.data.data);
+            const response = await axiosInstance.get(`/resume?page=${page}`);
+            setResumes(response.data.data.data);
+            setTotalItems(response.data.data.metadata.total);
         } catch (error: any) {
             console.log(error);
             openErrorNotification("Can't fetch resumes");
@@ -30,8 +34,8 @@ const ResumePage = () => {
     };
 
     useEffect(() => {
-        getResumes();
-    }, []);
+        getResumes(currentPage);
+    }, [currentPage]);
 
     const showModal = (resume = null) => {
         if (resume) {
@@ -106,7 +110,7 @@ const ResumePage = () => {
             }
 
             setIsModalVisible(false);
-            getResumes();
+            getResumes(currentPage);
         } catch (error) {
             console.log(error);
             openErrorNotification("Failed to add or update resume");
@@ -119,7 +123,7 @@ const ResumePage = () => {
         try {
             await axiosInstance.delete(`/resume/${id}`);
             openSuccessNotification("Resume deleted successfully");
-            getResumes();
+            getResumes(currentPage);
         } catch (error) {
             console.error("Delete failed:", error);
             openErrorNotification("Failed to delete resume");
@@ -171,6 +175,10 @@ const ResumePage = () => {
         navigate(`/resume/${record.id}`);
     };
 
+    const handleTableChange = (pagination: any) => {
+        setCurrentPage(pagination.current);
+    };
+
     return (
         <Layout style={{
             minHeight: '100vh',
@@ -199,6 +207,12 @@ const ResumePage = () => {
                             style={{ width: '1200px' }}
                             dataSource={resumes}
                             columns={columns}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: pageSize,
+                                total: totalItems,
+                            }}
+                            onChange={handleTableChange}
                             onRow={(record) => ({
                                 onClick: () => onRowClick(record),
                             })}

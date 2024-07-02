@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ResumeEntity } from './entities/resume.entity';
 import { StorageService } from 'src/storage/storage.service';
+import { SQL_TAKE } from 'src/shared/const/sql-take.const';
 
 @Injectable()
 export class ResumeService {
@@ -41,8 +42,25 @@ export class ResumeService {
     return await this.storageService.generateSignedUrl(resume.objectKey, 3600);
   }
 
-  async getAll(userId: string): Promise<ResumeEntity[]> {
-    return this.resumeRepository.find({ where: { userId } });
+  async getAll(userId: string, page: number = 1): Promise<any> {
+    const take = SQL_TAKE;
+    const [results, total] = await this.resumeRepository
+      .createQueryBuilder('resume')
+      .where('resume.userId = :userId', { userId })
+      .select(['resume'])
+      .skip((page - 1) * take)
+      .take(take)
+      .orderBy('resume.created_at', 'ASC')
+      .getManyAndCount();
+
+    return {
+      data: results,
+      metadata: {
+        total,
+        page: +page,
+        lastPage: Math.ceil(total / take),
+      },
+    };
   }
 
   async getById(userId: string, id: string): Promise<ResumeEntity> {
@@ -53,8 +71,25 @@ export class ResumeService {
     return resume;
   }
 
-  async getAllReviewable(): Promise<ResumeEntity[]> {
-    return this.resumeRepository.find({ where: { isReviewable: true } });
+  async getAllReviewable(page: number = 1): Promise<any> {
+    const take = SQL_TAKE;
+    const [results, total] = await this.resumeRepository
+      .createQueryBuilder('resume')
+      .where('resume.isReviewable = :isReviewable', { isReviewable: true })
+      .select(['resume'])
+      .skip((page - 1) * take)
+      .take(take)
+      .orderBy('resume.created_at', 'ASC')
+      .getManyAndCount();
+
+    return {
+      data: results,
+      metadata: {
+        total,
+        page: +page,
+        lastPage: Math.ceil(total / take),
+      },
+    };
   }
 
   async getByIdReviewable(id: string): Promise<ResumeEntity> {

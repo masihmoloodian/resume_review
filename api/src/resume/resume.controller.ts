@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ResumeService } from './resume.service';
 import { CreateResumeDto } from './dto/create-resume.dto';
@@ -16,6 +17,7 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import { User } from 'src/shared/decorators/user.decorator';
 import { ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { PaginationDto } from 'src/shared/dto/pagniation.dto';
 
 @ApiTags('Resume')
 @Controller('resume')
@@ -35,9 +37,9 @@ export class ResumeController {
   @ApiOperation({ summary: "Get all user's resume available for review" })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async getAllReviewable() {
-    const result = await this.resumeService.getAllReviewable();
-    return new ResponseDto(result);
+  async getAllReviewable(@Query() dto: PaginationDto) {
+    const result = await this.resumeService.getAllReviewable(dto.page);
+    return new ResponseDto(result.data, result.metadata);
   }
 
   @Get('reviewable/:id')
@@ -62,8 +64,8 @@ export class ResumeController {
   @ApiOperation({ summary: "Get all user's resume" })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async getAll(@User() user: UserEntity) {
-    const result = await this.resumeService.getAll(user.id);
+  async getAll(@User() user: UserEntity, @Query() dto: PaginationDto) {
+    const result = await this.resumeService.getAll(user.id, dto.page);
     return new ResponseDto(result);
   }
 

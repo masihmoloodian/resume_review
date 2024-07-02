@@ -36,8 +36,8 @@ export class ReviewController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   async findAll(@User() user: UserEntity) {
-    const result = this.reviewService.getAll(user.id);
-    return new ResponseDto(result);
+    const result = await this.reviewService.getAll(user.id);
+    return new ResponseDto(result.data, result.metadata);
   }
 
   @Get(':id')

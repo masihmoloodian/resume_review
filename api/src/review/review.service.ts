@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ReviewEntity } from './entities/review.entity';
 import { ResumeService } from 'src/resume/resume.service';
+import { SQL_TAKE } from 'src/shared/const/sql-take.const';
 
 @Injectable()
 export class ReviewService {
@@ -38,12 +39,25 @@ export class ReviewService {
     return this.reviewRepository.save(review);
   }
 
-  async getAll(userId: string): Promise<ReviewEntity[]> {
-    return this.reviewRepository.find({
-      where: {
-        userId,
+  async getAll(userId: string, page: number = 1): Promise<any> {
+    const take = SQL_TAKE;
+    const [results, total] = await this.reviewRepository
+      .createQueryBuilder('review')
+      .where('resume.userId = :userId', { userId })
+      .select(['review'])
+      .skip((page - 1) * take)
+      .take(take)
+      .orderBy('review.created_at', 'ASC')
+      .getManyAndCount();
+
+    return {
+      data: results,
+      metadata: {
+        total,
+        page: +page,
+        lastPage: Math.ceil(total / take),
       },
-    });
+    };
   }
 
   async getById(userId: string, id: string): Promise<ReviewEntity> {
