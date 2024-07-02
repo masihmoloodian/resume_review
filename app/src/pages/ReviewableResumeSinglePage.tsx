@@ -86,7 +86,7 @@ const ReviewableResumeSinglePage = () => {
                                     label="Review"
                                     rules={[{ required: true, message: 'Please enter your review' }]}
                                 >
-                                    <TextArea rows={4} />
+                                    <TextArea rows={8} />
                                 </Form.Item>
                                 <Form.Item
                                     name="anonymous"
