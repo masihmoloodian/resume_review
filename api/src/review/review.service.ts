@@ -52,7 +52,7 @@ export class ReviewService {
       ])
       .skip((page - 1) * take)
       .take(take)
-      .orderBy('review.created_at', 'ASC')
+      .orderBy('review.created_at', 'DESC')
       .getManyAndCount();
 
     return {
@@ -78,7 +78,7 @@ export class ReviewService {
       .select(['review'])
       .skip((page - 1) * take)
       .take(take)
-      .orderBy('review.created_at', 'ASC')
+      .orderBy('review.created_at', 'DESC')
       .getManyAndCount();
 
     return {

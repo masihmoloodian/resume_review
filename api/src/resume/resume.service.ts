@@ -56,7 +56,7 @@ export class ResumeService {
       .select(['resume'])
       .skip((page - 1) * take)
       .take(take)
-      .orderBy('resume.created_at', 'ASC')
+      .orderBy('resume.created_at', 'DESC')
       .getManyAndCount();
 
     return {
@@ -86,7 +86,7 @@ export class ResumeService {
       .select(['resume'])
       .skip((page - 1) * take)
       .take(take)
-      .orderBy('resume.created_at', 'ASC');
+      .orderBy('resume.created_at', 'DESC');
 
     if (dto.status == ResumeStatusEnum.REVIEWABLE)
       query.where('resume.isReviewable = :isReviewable', {
