@@ -28,7 +28,7 @@ export class ResumeService {
     return this.resumeRepository.save(resume);
   }
 
-  async getResume(userId: string, id: string) {
+  async getFile(userId: string, id: string) {
     const resume = await this.resumeRepository.findOne({
       where: {
         id,

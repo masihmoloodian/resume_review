@@ -54,7 +54,7 @@ export class ResumeController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   async getResume(@User() user: UserEntity, @Param('id') id: string) {
-    const result = await this.resumeService.getResume(user.id, id);
+    const result = await this.resumeService.getFile(user.id, id);
     return new ResponseDto(result);
   }
 
