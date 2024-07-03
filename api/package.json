@@ -42,7 +42,6 @@
     "openai": "^4.47.1",
     "pdf-parse": "^1.1.1",
     "pg": "^8.11.5",
-    "puppeteer": "^22.10.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "tiktoken": "^1.0.15",
