@@ -6,9 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { AuthModule } from './auth/auth.module';
-import { OpenaiModule } from './openai/openai.module';
 import { RedisdbModule } from './redisdb/redisdb.module';
-import { LlamaindexModule } from './llamaindex/llamaindex.module';
 import { StorageModule } from './storage/storage.module';
 import { ResumeModule } from './resume/resume.module';
 import { ReviewModule } from './review/review.module';
@@ -34,9 +32,7 @@ import { ReviewModule } from './review/review.module';
     }),
     UserModule,
     AuthModule,
-    OpenaiModule,
     RedisdbModule,
-    LlamaindexModule,
     StorageModule,
     ResumeModule,
     ReviewModule,
