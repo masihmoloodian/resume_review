@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Layout, Table, Tag, Button, Row, Col, Modal, Tooltip, Switch, Pagination } from 'antd';
+import { Layout, Table, Button, Row, Col, Modal, Tooltip, Switch, Pagination } from 'antd';
 import axiosInstance from '../helper/axiosInstance';
 import Sidebar from '../components/Sidebar';
 import { Content } from 'antd/es/layout/layout';

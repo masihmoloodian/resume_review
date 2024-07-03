@@ -5,7 +5,6 @@ import Sidebar from '../components/Sidebar';
 import { Content } from 'antd/es/layout/layout';
 import { openErrorNotification, openSuccessNotification } from '../helper/notification';
 import moment from 'moment';
-import { getDiffieHellman } from 'crypto';
 
 const GivenReviewsPage = () => {
     const [reviews, setReviews] = useState([]);
