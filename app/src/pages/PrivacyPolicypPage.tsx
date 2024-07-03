@@ -22,7 +22,7 @@ const PrivacyPolicyPage: React.FC = () => {
                     <Paragraph>
                         We collect the following types of information:
                         <ul>
-                            <li><strong>Uploaded Documents:</strong> Users can upload resumes and other documents for review. By uploading these files, you agree that their contents can be shared with all users on the platform.</li>
+                            <li><strong>Uploaded Documents:</strong> Users can upload resumes and other documents for review. By uploading these files, you agree that their contents can be shared with all users every where.</li>
                             <li><strong>User Data:</strong> Information you provide when you register, such as your name, email address, and other contact details.</li>
                             <li><strong>Review Data:</strong> Comments and feedback you provide on other users’ resumes.</li>
                             <li><strong>Usage Data:</strong> Information about how you use the site, such as your interactions with other users and the content you upload or review.</li>
