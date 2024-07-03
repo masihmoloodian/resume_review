@@ -1,5 +1,7 @@
 # Resume Review
 
+https://resume.j3su.com/
+
 ## Overview
 
 Resume Review is a community-driven platform where users can share their resumes and receive feedback from other users for free. This project was inspired by the techimmigrant community (https://www.youtube.com/@TechImmigrants), where members share their resumes and seek feedback within a Telegram group. However, managing resumes and reviews within a group can be challenging, as it's easy to miss submissions and feedback. This platform aims to streamline the process and increase the visibility of shared resumes.
