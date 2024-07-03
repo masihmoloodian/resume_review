@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15.7-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: aiuser
+      POSTGRES_PASSWORD: lkdfjsfaskjd21gas
+      POSTGRES_DB: aidb
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  redis:
+    image: redis:7.2.5-alpine
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_network
+
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      APP_HOST: '0.0.0.0'
+      APP_PORT: 3000
+      SALT_HASH: ${SALT_HASH}
+      JWT_SECRET: ${JWT_SECRET}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      REDIS_HOST: ${REDIS_HOST}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME}
+      S3_ENDPOINT: ${S3_ENDPOINT}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    networks:
+      - app_network
+
+volumes:
+  pg_data:
+  redis_data:
+
+networks:
+  app_network:
