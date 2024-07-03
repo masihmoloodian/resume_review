@@ -42,7 +42,7 @@ export class ResumeService {
     });
 
     if (!resume) throw new NotFoundException('Resume not found');
-    if (resume.isReviewable && resume.userId != userId)
+    if (!resume.isReviewable && resume.userId != userId)
       throw new BadRequestException('This Resume is not reviewable');
 
     return await this.storageService.generateSignedUrl(resume.objectKey, 3600);
