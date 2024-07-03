@@ -5,9 +5,9 @@ services:
     image: postgres:15.7-alpine
     restart: always
     environment:
-      POSTGRES_USER: aiuser
-      POSTGRES_PASSWORD: lkdfjsfaskjd21gas
-      POSTGRES_DB: aidb
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
