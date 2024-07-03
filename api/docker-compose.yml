@@ -21,6 +21,15 @@ services:
     networks:
       - app_network
 
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_KEY}
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+
   backend:
     build:
       context: ./
