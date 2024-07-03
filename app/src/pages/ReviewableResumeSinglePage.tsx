@@ -39,7 +39,7 @@ const ReviewableResumeSinglePage = () => {
             const fileUrl = response.data.data;
             window.open(fileUrl, '_blank');
         } catch (error: any) {
-            openErrorNotification("Can't fetch resume file");
+            openErrorNotification(error.response.data.message)
         }
     };
 
