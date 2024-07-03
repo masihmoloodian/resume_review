@@ -74,7 +74,8 @@ export class ReviewService {
     const [results, total] = await this.reviewRepository
       .createQueryBuilder('review')
       .where('review.resumeId = :resumeId', { resumeId })
-      .andWhere('review.userId = :userId', { userId })
+      .innerJoinAndSelect('review.resume', 'resume')
+      .andWhere('resume.userId = :userId', { userId })
       .select(['review'])
       .skip((page - 1) * take)
       .take(take)
